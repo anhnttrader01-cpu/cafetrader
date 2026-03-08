@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
+
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>CafeTrader.pro</title>
 
 <script src="https://s3.tradingview.com/tv.js"></script>
@@ -10,10 +12,10 @@
 <style>
 
 body{
+margin:0;
+font-family:Arial;
 background:#0f172a;
 color:white;
-font-family:Arial;
-margin:0;
 }
 
 header{
@@ -24,6 +26,7 @@ text-align:center;
 
 h1{
 color:#facc15;
+margin:0;
 }
 
 .menu{
@@ -31,8 +34,8 @@ margin-top:10px;
 }
 
 .menu a{
+margin:10px;
 color:white;
-margin:15px;
 text-decoration:none;
 font-weight:bold;
 }
@@ -53,17 +56,62 @@ grid-template-columns:1fr 1fr;
 gap:20px;
 }
 
-.chartbox{
+.box{
 background:#020617;
-padding:10px;
+padding:20px;
 border-radius:10px;
 }
 
+input{
+padding:10px;
+margin:5px;
+border-radius:5px;
+border:none;
+}
+
+button{
+padding:10px 15px;
+border:none;
+border-radius:5px;
+background:#facc15;
+font-weight:bold;
+cursor:pointer;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+td,th{
+padding:10px;
+border-bottom:1px solid #1e293b;
+text-align:left;
+}
+
 footer{
-text-align:center;
 margin-top:50px;
-padding:20px;
 background:#020617;
+padding:20px;
+text-align:center;
+}
+
+/* mobile */
+
+@media(max-width:768px){
+
+.grid{
+grid-template-columns:1fr;
+}
+
+h1{
+font-size:22px;
+}
+
+.section{
+width:95%;
+}
+
 }
 
 </style>
@@ -78,18 +126,36 @@ background:#020617;
 
 <div class="menu">
 
-<a href="index.html">Home</a>
-<a href="signals.html">Signals</a>
+<a href="#">Dashboard</a>
+<a href="#journal">Journal</a>
+<a href="#signals">Signals</a>
+<a href="#login">Login</a>
 
 </div>
 
 </header>
 
+<!-- LIVE GOLD PRICE -->
+
 <div class="section">
 
-<h2>Gold Chart</h2>
+<div class="box">
 
-<div class="chartbox">
+<h2>Live Gold Price</h2>
+
+<div id="goldprice">Loading...</div>
+
+</div>
+
+</div>
+
+<!-- TRADINGVIEW CHART -->
+
+<div class="section">
+
+<div class="box">
+
+<h2>Gold Chart</h2>
 
 <div id="gold_chart"></div>
 
@@ -97,65 +163,48 @@ background:#020617;
 
 </div>
 
+<!-- FOREX + CRYPTO -->
+
 <div class="section">
 
-<h2>Forex Market</h2>
+<h2>Market Charts</h2>
 
 <div class="grid">
 
-<div class="chartbox">
-<div id="eurusd_chart"></div>
-</div>
+<div class="box">
 
-<div class="chartbox">
-<div id="gbpusd_chart"></div>
-</div>
+<div id="eurusd"></div>
 
 </div>
 
+<div class="box">
+
+<div id="btc"></div>
+
 </div>
+
+</div>
+
+</div>
+
+<!-- CRYPTO SCREENER -->
 
 <div class="section">
 
-<h2>Crypto Market</h2>
+<div class="box">
 
-<div class="grid">
+<h2>Crypto Screener</h2>
 
-<div class="chartbox">
-<div id="btc_chart"></div>
-</div>
-
-<div class="chartbox">
-<div id="eth_chart"></div>
-</div>
-
-</div>
-
-</div>
-
-<div class="section">
-
-<h2>Market Overview</h2>
-
-<script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js">
+<script src="https://s3.tradingview.com/external-embedding/embed-widget-screener.js">
 
 {
-"colorTheme": "dark",
+
 "width": "100%",
-"height": "400",
-"symbols": [
-
-["OANDA:XAUUSD"],
-
-["FX:EURUSD"],
-
-["FX:GBPUSD"],
-
-["BINANCE:BTCUSDT"],
-
-["BINANCE:ETHUSDT"]
-
-]
+"height": "500",
+"defaultColumn": "overview",
+"screener_type": "crypto_mkt",
+"displayCurrency": "USD",
+"colorTheme": "dark"
 
 }
 
@@ -163,75 +212,303 @@ background:#020617;
 
 </div>
 
+</div>
+
+<!-- FOREX HEATMAP -->
+
 <div class="section">
+
+<div class="box">
+
+<h2>Forex Heatmap</h2>
+
+<script src="https://s3.tradingview.com/external-embedding/embed-widget-forex-heat-map.js">
+
+{
+
+"width": "100%",
+"height": "400",
+"currencies":[
+
+"USD",
+"EUR",
+"GBP",
+"JPY",
+"AUD",
+"CAD",
+"CHF"
+
+],
+
+"colorTheme":"dark"
+
+}
+
+</script>
+
+</div>
+
+</div>
+
+<!-- AI SIGNAL -->
+
+<div class="section" id="signals">
+
+<div class="box">
+
+<h2>AI Signal Bot</h2>
+
+<div id="signal">Calculating...</div>
+
+</div>
+
+</div>
+
+<!-- TRADING JOURNAL -->
+
+<div class="section" id="journal">
+
+<div class="box">
+
+<h2>Trading Journal</h2>
+
+<input id="pair" placeholder="Pair">
+
+<input id="profit" placeholder="Profit/Loss">
+
+<button onclick="addTrade()">Add Trade</button>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Pair</th>
+<th>Result</th>
+
+</tr>
+
+</thead>
+
+<tbody id="journalTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<!-- ECONOMIC CALENDAR -->
+
+<div class="section">
+
+<div class="box">
 
 <h2>Economic Calendar</h2>
 
 <iframe
-src="https://sslecal2.investing.com/?columns=exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous&importance=1,2,3&features=datepicker,timezone,timeselector&countries=25,37,72,5&calType=week&timeZone=8&lang=1"
+
+src="https://sslecal2.investing.com/?columns=exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous&importance=1,2,3&features=datepicker&countries=25,37,72&calType=week"
+
 width="100%"
 height="500">
+
 </iframe>
+
+</div>
+
+</div>
+
+<!-- LOGIN -->
+
+<div class="section" id="login">
+
+<div class="box">
+
+<h2>Member Login</h2>
+
+<input id="user" placeholder="username">
+
+<input id="pass" type="password" placeholder="password">
+
+<button onclick="login()">Login</button>
+
+<div id="loginmsg"></div>
+
+</div>
 
 </div>
 
 <footer>
 
-CafeTrader.pro Trading Dashboard
+CafeTrader.pro Trading Platform
 
 </footer>
 
 <script>
 
-new TradingView.widget({
-"container_id": "gold_chart",
-"symbol": "OANDA:XAUUSD",
-"interval": "15",
-"theme": "dark",
-"style": "1",
-"width": "100%",
-"height": "500"
-});
+/* TRADINGVIEW CHART */
 
 new TradingView.widget({
-"container_id": "eurusd_chart",
-"symbol": "FX:EURUSD",
-"interval": "15",
-"theme": "dark",
-"style": "1",
-"width": "100%",
-"height": "400"
-});
+
+container_id:"gold_chart",
+
+symbol:"OANDA:XAUUSD",
+
+interval:"15",
+
+theme:"dark",
+
+style:"1",
+
+width:"100%",
+
+height:500
+
+})
 
 new TradingView.widget({
-"container_id": "gbpusd_chart",
-"symbol": "FX:GBPUSD",
-"interval": "15",
-"theme": "dark",
-"style": "1",
-"width": "100%",
-"height": "400"
-});
+
+container_id:"eurusd",
+
+symbol:"FX:EURUSD",
+
+interval:"15",
+
+theme:"dark",
+
+style:"1",
+
+width:"100%",
+
+height:300
+
+})
 
 new TradingView.widget({
-"container_id": "btc_chart",
-"symbol": "BINANCE:BTCUSDT",
-"interval": "30",
-"theme": "dark",
-"style": "1",
-"width": "100%",
-"height": "400"
-});
 
-new TradingView.widget({
-"container_id": "eth_chart",
-"symbol": "BINANCE:ETHUSDT",
-"interval": "30",
-"theme": "dark",
-"style": "1",
-"width": "100%",
-"height": "400"
-});
+container_id:"btc",
+
+symbol:"BINANCE:BTCUSDT",
+
+interval:"30",
+
+theme:"dark",
+
+style:"1",
+
+width:"100%",
+
+height:300
+
+})
+
+/* GOLD PRICE */
+
+async function loadGold(){
+
+try{
+
+let res=await fetch("https://api.metals.live/v1/spot/gold")
+
+let data=await res.json()
+
+document.getElementById("goldprice").innerHTML="Gold Price: "+data[0].price+" USD"
+
+}
+
+catch{
+
+document.getElementById("goldprice").innerHTML="API Error"
+
+}
+
+}
+
+setInterval(loadGold,5000)
+
+loadGold()
+
+/* AI SIGNAL */
+
+function aiSignal(){
+
+let rsi=Math.random()*100
+
+let signal="WAIT"
+
+if(rsi<30) signal="BUY"
+
+if(rsi>70) signal="SELL"
+
+document.getElementById("signal").innerHTML="AI Signal: "+signal
+
+}
+
+setInterval(aiSignal,4000)
+
+aiSignal()
+
+/* TRADING JOURNAL */
+
+function loadJournal(){
+
+let data=JSON.parse(localStorage.getItem("journal"))||[]
+
+let table=document.getElementById("journalTable")
+
+table.innerHTML=""
+
+data.forEach(t=>{
+
+let row="<tr><td>"+t.pair+"</td><td>"+t.profit+"</td></tr>"
+
+table.innerHTML+=row
+
+})
+
+}
+
+function addTrade(){
+
+let pair=document.getElementById("pair").value
+
+let profit=document.getElementById("profit").value
+
+let data=JSON.parse(localStorage.getItem("journal"))||[]
+
+data.push({pair,profit})
+
+localStorage.setItem("journal",JSON.stringify(data))
+
+loadJournal()
+
+}
+
+loadJournal()
+
+/* LOGIN */
+
+function login(){
+
+let u=document.getElementById("user").value
+
+let p=document.getElementById("pass").value
+
+if(u==="admin" && p==="1234"){
+
+document.getElementById("loginmsg").innerHTML="Login Success"
+
+}
+
+else{
+
+document.getElementById("loginmsg").innerHTML="Wrong login"
+
+}
+
+}
 
 </script>
 
