@@ -1,16 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
+
 <head>
 <meta charset="UTF-8">
-<title>CafeTrader</title>
+<title>CafeTrader.pro</title>
 
 <script src="https://s3.tradingview.com/tv.js"></script>
 
 <style>
+
 body{
 background:#0f172a;
 color:white;
 font-family:Arial;
+margin:0;
+}
+
+header{
+background:#020617;
+padding:20px;
 text-align:center;
 }
 
@@ -18,30 +26,175 @@ h1{
 color:#facc15;
 }
 
-.chart{
+.menu{
+margin-top:10px;
+}
+
+.menu a{
+color:white;
+margin:15px;
+text-decoration:none;
+font-weight:bold;
+}
+
+.menu a:hover{
+color:#facc15;
+}
+
+.section{
 width:90%;
 margin:auto;
+margin-top:40px;
 }
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+}
+
+.chartbox{
+background:#020617;
+padding:10px;
+border-radius:10px;
+}
+
+footer{
+text-align:center;
+margin-top:50px;
+padding:20px;
+background:#020617;
+}
+
 </style>
 
 </head>
 
-<body><div style="margin:20px;">
-<a href="index.html" style="color:white;margin:10px;">Home</a>
-<a href="signals.html" style="color:white;margin:10px;">Signals</a>
-</div>
+<body>
+
+<header>
 
 <h1>☕ CafeTrader.pro</h1>
 
-<h3>Gold Trading Chart</h3>
-<h2>Forex Chart</h2>
+<div class="menu">
 
-<div id="forex_chart"></div>
+<a href="index.html">Home</a>
+<a href="signals.html">Signals</a>
+
+</div>
+
+</header>
+
+<div class="section">
+
+<h2>Gold Chart</h2>
+
+<div class="chartbox">
+
+<div id="gold_chart"></div>
+
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>Forex Market</h2>
+
+<div class="grid">
+
+<div class="chartbox">
+<div id="eurusd_chart"></div>
+</div>
+
+<div class="chartbox">
+<div id="gbpusd_chart"></div>
+</div>
+
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>Crypto Market</h2>
+
+<div class="grid">
+
+<div class="chartbox">
+<div id="btc_chart"></div>
+</div>
+
+<div class="chartbox">
+<div id="eth_chart"></div>
+</div>
+
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>Market Overview</h2>
+
+<script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js">
+
+{
+"colorTheme": "dark",
+"width": "100%",
+"height": "400",
+"symbols": [
+
+["OANDA:XAUUSD"],
+
+["FX:EURUSD"],
+
+["FX:GBPUSD"],
+
+["BINANCE:BTCUSDT"],
+
+["BINANCE:ETHUSDT"]
+
+]
+
+}
+
+</script>
+
+</div>
+
+<div class="section">
+
+<h2>Economic Calendar</h2>
+
+<iframe
+src="https://sslecal2.investing.com/?columns=exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous&importance=1,2,3&features=datepicker,timezone,timeselector&countries=25,37,72,5&calType=week&timeZone=8&lang=1"
+width="100%"
+height="500">
+</iframe>
+
+</div>
+
+<footer>
+
+CafeTrader.pro Trading Dashboard
+
+</footer>
 
 <script>
 
 new TradingView.widget({
-"container_id": "forex_chart",
+"container_id": "gold_chart",
+"symbol": "OANDA:XAUUSD",
+"interval": "15",
+"theme": "dark",
+"style": "1",
+"width": "100%",
+"height": "500"
+});
+
+new TradingView.widget({
+"container_id": "eurusd_chart",
 "symbol": "FX:EURUSD",
 "interval": "15",
 "theme": "dark",
@@ -50,35 +203,18 @@ new TradingView.widget({
 "height": "400"
 });
 
-</script>
-<div class="chart">
-
-<h2>Market Charts</h2>
-
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
-
-<div id="gold_chart"></div>
-
-<div id="forex_chart"></div>
-
-</div>
-
-<script>
-
-</script>
-
-</div>
-
-</body>
-</html>
-<h2>Crypto Market</h2>
-
-<div id="crypto_chart"></div>
-
-<script>
+new TradingView.widget({
+"container_id": "gbpusd_chart",
+"symbol": "FX:GBPUSD",
+"interval": "15",
+"theme": "dark",
+"style": "1",
+"width": "100%",
+"height": "400"
+});
 
 new TradingView.widget({
-"container_id": "crypto_chart",
+"container_id": "btc_chart",
 "symbol": "BINANCE:BTCUSDT",
 "interval": "30",
 "theme": "dark",
@@ -87,20 +223,17 @@ new TradingView.widget({
 "height": "400"
 });
 
-</script> 
-<h2>Market Overview</h2>
-
-<script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js">
-{
-"colorTheme": "dark",
+new TradingView.widget({
+"container_id": "eth_chart",
+"symbol": "BINANCE:ETHUSDT",
+"interval": "30",
+"theme": "dark",
+"style": "1",
 "width": "100%",
-"height": "400",
-"symbols": [
-["OANDA:XAUUSD"],
-["FX:EURUSD"],
-["FX:GBPUSD"],
-["BINANCE:BTCUSDT"],
-["NASDAQ:AAPL"]
-]
-}
+"height": "400"
+});
+
 </script>
+
+</body>
+</html>
