@@ -37,21 +37,17 @@ margin:auto;
 
 <div class="chart">
 
-<div id="tradingview_chart"></div>
+<h2>Market Charts</h2>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+
+<div id="gold_chart"></div>
+
+<div id="forex_chart"></div>
+
+</div>
 
 <script>
-
-new TradingView.widget({
-width:"100%",
-height:500,
-symbol:"OANDA:XAUUSD",
-interval:"15",
-timezone:"Etc/UTC",
-theme:"dark",
-style:"1",
-locale:"en",
-container_id:"tradingview_chart"
-});
 
 </script>
 
