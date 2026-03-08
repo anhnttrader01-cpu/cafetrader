@@ -1,11 +1,13 @@
+```html
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>CafeTrader.pro</title>
+<title>CafeTrader Elite Platform</title>
 
 <script src="https://s3.tradingview.com/tv.js"></script>
 
@@ -20,34 +22,38 @@ color:white;
 
 header{
 background:#020617;
-padding:20px;
+padding:15px;
 text-align:center;
 }
 
-h1{
+header h1{
 color:#facc15;
 margin:0;
 }
 
-.menu{
+nav{
 margin-top:10px;
 }
 
-.menu a{
-margin:10px;
+nav button{
+margin:5px;
+padding:8px 12px;
+border:none;
+border-radius:6px;
+background:#1e293b;
 color:white;
-text-decoration:none;
-font-weight:bold;
+cursor:pointer;
 }
 
-.menu a:hover{
-color:#facc15;
+nav button:hover{
+background:#facc15;
+color:black;
 }
 
 .section{
 width:90%;
 margin:auto;
-margin-top:40px;
+margin-top:30px;
 }
 
 .grid{
@@ -59,23 +65,20 @@ gap:20px;
 .box{
 background:#020617;
 padding:20px;
-border-radius:10px;
+border-radius:12px;
 }
 
 input{
-padding:10px;
+padding:8px;
 margin:5px;
 border-radius:5px;
 border:none;
 }
 
-button{
-padding:10px 15px;
-border:none;
-border-radius:5px;
+button.main{
 background:#facc15;
+color:black;
 font-weight:bold;
-cursor:pointer;
 }
 
 table{
@@ -84,19 +87,13 @@ border-collapse:collapse;
 }
 
 td,th{
-padding:10px;
+padding:8px;
 border-bottom:1px solid #1e293b;
-text-align:left;
 }
 
-footer{
-margin-top:50px;
-background:#020617;
-padding:20px;
-text-align:center;
+.mobile{
+display:none;
 }
-
-/* mobile */
 
 @media(max-width:768px){
 
@@ -104,12 +101,8 @@ text-align:center;
 grid-template-columns:1fr;
 }
 
-h1{
-font-size:22px;
-}
-
-.section{
-width:95%;
+.mobile{
+display:block;
 }
 
 }
@@ -122,64 +115,57 @@ width:95%;
 
 <header>
 
-<h1>☕ CafeTrader.pro</h1>
+<h1 id="title">CafeTrader Elite</h1>
 
-<div class="menu">
+<nav>
 
-<a href="#">Dashboard</a>
-<a href="#journal">Journal</a>
-<a href="#signals">Signals</a>
-<a href="#login">Login</a>
+<button onclick="showPage('dashboard')">Dashboard</button>
+<button onclick="showPage('portfolio')">Portfolio</button>
+<button onclick="showPage('journal')">Journal</button>
+<button onclick="showPage('copy')">Copy Trading</button>
 
-</div>
+<select onchange="setLang(this.value)">
+
+<option value="en">EN</option>
+<option value="vi">VI</option>
+<option value="es">ES</option>
+<option value="fr">FR</option>
+<option value="de">DE</option>
+<option value="ru">RU</option>
+<option value="zh">ZH</option>
+<option value="ja">JA</option>
+<option value="kr">KR</option>
+<option value="pt">PT</option>
+
+</select>
+
+</nav>
 
 </header>
 
-<!-- LIVE GOLD PRICE -->
-
 <div class="section">
 
-<div class="box">
+<div id="dashboard">
 
-<h2>Live Gold Price</h2>
+<h2>AI Signal Dashboard</h2>
 
-<div id="goldprice">Loading...</div>
-
-</div>
-
-</div>
-
-<!-- TRADINGVIEW CHART -->
-
-<div class="section">
-
-<div class="box">
-
-<h2>Gold Chart</h2>
-
-<div id="gold_chart"></div>
-
-</div>
-
-</div>
-
-<!-- FOREX + CRYPTO -->
-
-<div class="section">
-
-<h2>Market Charts</h2>
+<div id="signal"></div>
 
 <div class="grid">
 
 <div class="box">
 
-<div id="eurusd"></div>
+<h3>Gold Chart</h3>
+
+<div id="gold_chart"></div>
 
 </div>
 
 <div class="box">
 
-<div id="btc"></div>
+<h3>BTC Chart</h3>
+
+<div id="btc_chart"></div>
 
 </div>
 
@@ -187,96 +173,42 @@ width:95%;
 
 </div>
 
-<!-- CRYPTO SCREENER -->
+<div id="portfolio" style="display:none">
 
-<div class="section">
+<h2>Portfolio Tracker</h2>
 
-<div class="box">
+<input id="asset" placeholder="Asset">
+<input id="amount" placeholder="Amount">
 
-<h2>Crypto Screener</h2>
+<button class="main" onclick="addAsset()">Add</button>
 
-<script src="https://s3.tradingview.com/external-embedding/embed-widget-screener.js">
+<table>
 
-{
+<thead>
 
-"width": "100%",
-"height": "500",
-"defaultColumn": "overview",
-"screener_type": "crypto_mkt",
-"displayCurrency": "USD",
-"colorTheme": "dark"
+<tr>
 
-}
+<th>Asset</th>
+<th>Amount</th>
 
-</script>
+</tr>
 
-</div>
+</thead>
 
-</div>
+<tbody id="portfolioTable"></tbody>
 
-<!-- FOREX HEATMAP -->
-
-<div class="section">
-
-<div class="box">
-
-<h2>Forex Heatmap</h2>
-
-<script src="https://s3.tradingview.com/external-embedding/embed-widget-forex-heat-map.js">
-
-{
-
-"width": "100%",
-"height": "400",
-"currencies":[
-
-"USD",
-"EUR",
-"GBP",
-"JPY",
-"AUD",
-"CAD",
-"CHF"
-
-],
-
-"colorTheme":"dark"
-
-}
-
-</script>
+</table>
 
 </div>
 
-</div>
-
-<!-- AI SIGNAL -->
-
-<div class="section" id="signals">
-
-<div class="box">
-
-<h2>AI Signal Bot</h2>
-
-<div id="signal">Calculating...</div>
-
-</div>
-
-</div>
-
-<!-- TRADING JOURNAL -->
-
-<div class="section" id="journal">
-
-<div class="box">
+<div id="journal" style="display:none">
 
 <h2>Trading Journal</h2>
 
 <input id="pair" placeholder="Pair">
+<input id="result" placeholder="Result">
 
-<input id="profit" placeholder="Profit/Loss">
-
-<button onclick="addTrade()">Add Trade</button>
+<button class="main" onclick="addTrade()">Add Trade</button>
 
 <table>
 
@@ -297,140 +229,84 @@ width:95%;
 
 </div>
 
+<div id="copy" style="display:none">
+
+<h2>Copy Trading</h2>
+
+<table>
+
+<tr>
+
+<th>Trader</th>
+<th>ROI</th>
+<th>Action</th>
+
+</tr>
+
+<tr>
+
+<td>AlphaTrader</td>
+<td>210%</td>
+<td><button>Copy</button></td>
+
+</tr>
+
+<tr>
+
+<td>CryptoWolf</td>
+<td>180%</td>
+<td><button>Copy</button></td>
+
+</tr>
+
+<tr>
+
+<td>GoldSniper</td>
+<td>150%</td>
+<td><button>Copy</button></td>
+
+</tr>
+
+</table>
+
 </div>
 
-<!-- ECONOMIC CALENDAR -->
-
-<div class="section">
-
-<div class="box">
-
-<h2>Economic Calendar</h2>
-
-<iframe
-
-src="https://sslecal2.investing.com/?columns=exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous&importance=1,2,3&features=datepicker&countries=25,37,72&calType=week"
-
-width="100%"
-height="500">
-
-</iframe>
-
 </div>
-
-</div>
-
-<!-- LOGIN -->
-
-<div class="section" id="login">
-
-<div class="box">
-
-<h2>Member Login</h2>
-
-<input id="user" placeholder="username">
-
-<input id="pass" type="password" placeholder="password">
-
-<button onclick="login()">Login</button>
-
-<div id="loginmsg"></div>
-
-</div>
-
-</div>
-
-<footer>
-
-CafeTrader.pro Trading Platform
-
-</footer>
 
 <script>
 
-/* TRADINGVIEW CHART */
+function showPage(id){
+
+document.getElementById("dashboard").style.display="none"
+document.getElementById("portfolio").style.display="none"
+document.getElementById("journal").style.display="none"
+document.getElementById("copy").style.display="none"
+
+document.getElementById(id).style.display="block"
+
+}
 
 new TradingView.widget({
 
 container_id:"gold_chart",
-
 symbol:"OANDA:XAUUSD",
-
 interval:"15",
-
 theme:"dark",
-
-style:"1",
-
 width:"100%",
-
-height:500
+height:400
 
 })
 
 new TradingView.widget({
 
-container_id:"eurusd",
-
-symbol:"FX:EURUSD",
-
-interval:"15",
-
-theme:"dark",
-
-style:"1",
-
-width:"100%",
-
-height:300
-
-})
-
-new TradingView.widget({
-
-container_id:"btc",
-
+container_id:"btc_chart",
 symbol:"BINANCE:BTCUSDT",
-
 interval:"30",
-
 theme:"dark",
-
-style:"1",
-
 width:"100%",
-
-height:300
+height:400
 
 })
-
-/* GOLD PRICE */
-
-async function loadGold(){
-
-try{
-
-let res=await fetch("https://api.metals.live/v1/spot/gold")
-
-let data=await res.json()
-
-document.getElementById("goldprice").innerHTML="Gold Price: "+data[0].price+" USD"
-
-}
-
-catch{
-
-document.getElementById("goldprice").innerHTML="API Error"
-
-}
-
-}
-
-setInterval(loadGold,5000)
-
-loadGold()
-
-/* AI SIGNAL */
 
 function aiSignal(){
 
@@ -439,46 +315,53 @@ let rsi=Math.random()*100
 let signal="WAIT"
 
 if(rsi<30) signal="BUY"
-
 if(rsi>70) signal="SELL"
 
-document.getElementById("signal").innerHTML="AI Signal: "+signal
+document.getElementById("signal").innerText="AI Signal: "+signal
 
 }
 
 setInterval(aiSignal,4000)
 
-aiSignal()
+function addAsset(){
 
-/* TRADING JOURNAL */
+let asset=document.getElementById("asset").value
+let amount=document.getElementById("amount").value
 
-function loadJournal(){
+let data=JSON.parse(localStorage.getItem("portfolio"))||[]
 
-let data=JSON.parse(localStorage.getItem("journal"))||[]
+data.push({asset,amount})
 
-let table=document.getElementById("journalTable")
+localStorage.setItem("portfolio",JSON.stringify(data))
 
-table.innerHTML=""
+loadPortfolio()
 
-data.forEach(t=>{
+}
 
-let row="<tr><td>"+t.pair+"</td><td>"+t.profit+"</td></tr>"
+function loadPortfolio(){
 
-table.innerHTML+=row
+let data=JSON.parse(localStorage.getItem("portfolio"))||[]
+
+let html=""
+
+data.forEach(d=>{
+
+html+=`<tr><td>${d.asset}</td><td>${d.amount}</td></tr>`
 
 })
+
+document.getElementById("portfolioTable").innerHTML=html
 
 }
 
 function addTrade(){
 
 let pair=document.getElementById("pair").value
-
-let profit=document.getElementById("profit").value
+let result=document.getElementById("result").value
 
 let data=JSON.parse(localStorage.getItem("journal"))||[]
 
-data.push({pair,profit})
+data.push({pair,result})
 
 localStorage.setItem("journal",JSON.stringify(data))
 
@@ -486,27 +369,43 @@ loadJournal()
 
 }
 
+function loadJournal(){
+
+let data=JSON.parse(localStorage.getItem("journal"))||[]
+
+let html=""
+
+data.forEach(d=>{
+
+html+=`<tr><td>${d.pair}</td><td>${d.result}</td></tr>`
+
+})
+
+document.getElementById("journalTable").innerHTML=html
+
+}
+
+loadPortfolio()
 loadJournal()
 
-/* LOGIN */
+const lang={
 
-function login(){
-
-let u=document.getElementById("user").value
-
-let p=document.getElementById("pass").value
-
-if(u==="admin" && p==="1234"){
-
-document.getElementById("loginmsg").innerHTML="Login Success"
-
-}
-
-else{
-
-document.getElementById("loginmsg").innerHTML="Wrong login"
+en:{title:"CafeTrader Elite"},
+vi:{title:"Nền tảng CafeTrader"},
+es:{title:"Plataforma CafeTrader"},
+fr:{title:"Plateforme CafeTrader"},
+de:{title:"CafeTrader Plattform"},
+ru:{title:"Платформа CafeTrader"},
+zh:{title:"CafeTrader 平台"},
+ja:{title:"CafeTrader プラットフォーム"},
+kr:{title:"CafeTrader 플랫폼"},
+pt:{title:"Plataforma CafeTrader"}
 
 }
+
+function setLang(l){
+
+document.getElementById("title").innerText=lang[l].title
 
 }
 
@@ -514,3 +413,4 @@ document.getElementById("loginmsg").innerHTML="Wrong login"
 
 </body>
 </html>
+```
