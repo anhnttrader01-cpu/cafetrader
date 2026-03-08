@@ -1,13 +1,12 @@
 ```html
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>CafeTrader Elite Platform</title>
+<title>CafeTrader ULTRA</title>
 
 <script src="https://s3.tradingview.com/tv.js"></script>
 
@@ -37,7 +36,7 @@ margin-top:10px;
 
 nav button{
 margin:5px;
-padding:8px 12px;
+padding:8px 14px;
 border:none;
 border-radius:6px;
 background:#1e293b;
@@ -68,19 +67,6 @@ padding:20px;
 border-radius:12px;
 }
 
-input{
-padding:8px;
-margin:5px;
-border-radius:5px;
-border:none;
-}
-
-button.main{
-background:#facc15;
-color:black;
-font-weight:bold;
-}
-
 table{
 width:100%;
 border-collapse:collapse;
@@ -91,18 +77,24 @@ padding:8px;
 border-bottom:1px solid #1e293b;
 }
 
-.mobile{
-display:none;
+input{
+padding:8px;
+margin:5px;
+border-radius:5px;
+border:none;
+}
+
+.mainbtn{
+background:#facc15;
+color:black;
+font-weight:bold;
+cursor:pointer;
 }
 
 @media(max-width:768px){
 
 .grid{
 grid-template-columns:1fr;
-}
-
-.mobile{
-display:block;
 }
 
 }
@@ -115,17 +107,19 @@ display:block;
 
 <header>
 
-<h1 id="title">CafeTrader Elite</h1>
+<h1 id="title">CafeTrader ULTRA</h1>
 
 <nav>
 
-<button onclick="showPage('dashboard')">Dashboard</button>
-<button onclick="showPage('portfolio')">Portfolio</button>
-<button onclick="showPage('journal')">Journal</button>
-<button onclick="showPage('copy')">Copy Trading</button>
+<button onclick="page('dashboard')">Dashboard</button>
+<button onclick="page('screener')">Screener</button>
+<button onclick="page('portfolio')">Portfolio</button>
+<button onclick="page('journal')">Journal</button>
+<button onclick="page('social')">Social</button>
+<button onclick="page('leaderboard')">Leaderboard</button>
+<button onclick="page('login')">Login</button>
 
 <select onchange="setLang(this.value)">
-
 <option value="en">EN</option>
 <option value="vi">VI</option>
 <option value="es">ES</option>
@@ -136,7 +130,6 @@ display:block;
 <option value="ja">JA</option>
 <option value="kr">KR</option>
 <option value="pt">PT</option>
-
 </select>
 
 </nav>
@@ -150,6 +143,8 @@ display:block;
 <h2>AI Signal Dashboard</h2>
 
 <div id="signal"></div>
+
+<div id="fear"></div>
 
 <div class="grid">
 
@@ -173,6 +168,27 @@ display:block;
 
 </div>
 
+<div id="screener" style="display:none">
+
+<h2>Market Screener</h2>
+
+<table>
+
+<thead>
+<tr>
+<th>Coin</th>
+<th>Price</th>
+<th>24h</th>
+<th>Market Cap</th>
+</tr>
+</thead>
+
+<tbody id="market"></tbody>
+
+</table>
+
+</div>
+
 <div id="portfolio" style="display:none">
 
 <h2>Portfolio Tracker</h2>
@@ -180,19 +196,15 @@ display:block;
 <input id="asset" placeholder="Asset">
 <input id="amount" placeholder="Amount">
 
-<button class="main" onclick="addAsset()">Add</button>
+<button class="mainbtn" onclick="addAsset()">Add</button>
 
 <table>
 
 <thead>
-
 <tr>
-
 <th>Asset</th>
 <th>Amount</th>
-
 </tr>
-
 </thead>
 
 <tbody id="portfolioTable"></tbody>
@@ -208,19 +220,15 @@ display:block;
 <input id="pair" placeholder="Pair">
 <input id="result" placeholder="Result">
 
-<button class="main" onclick="addTrade()">Add Trade</button>
+<button class="mainbtn" onclick="addTrade()">Add Trade</button>
 
 <table>
 
 <thead>
-
 <tr>
-
 <th>Pair</th>
 <th>Result</th>
-
 </tr>
-
 </thead>
 
 <tbody id="journalTable"></tbody>
@@ -229,45 +237,63 @@ display:block;
 
 </div>
 
-<div id="copy" style="display:none">
+<div id="social" style="display:none">
 
-<h2>Copy Trading</h2>
+<h2>Social Trading</h2>
+
+<input id="signalPair" placeholder="Pair">
+<input id="signalType" placeholder="BUY/SELL">
+
+<button class="mainbtn" onclick="postSignal()">Post</button>
+
+<ul id="feed"></ul>
+
+</div>
+
+<div id="leaderboard" style="display:none">
+
+<h2>Trader Leaderboard</h2>
 
 <table>
 
 <tr>
-
 <th>Trader</th>
 <th>ROI</th>
-<th>Action</th>
-
+<th>Followers</th>
 </tr>
 
 <tr>
-
 <td>AlphaTrader</td>
-<td>210%</td>
-<td><button>Copy</button></td>
-
+<td>230%</td>
+<td>1200</td>
 </tr>
 
 <tr>
-
 <td>CryptoWolf</td>
-<td>180%</td>
-<td><button>Copy</button></td>
-
+<td>190%</td>
+<td>900</td>
 </tr>
 
 <tr>
-
 <td>GoldSniper</td>
-<td>150%</td>
-<td><button>Copy</button></td>
-
+<td>160%</td>
+<td>700</td>
 </tr>
 
 </table>
+
+</div>
+
+<div id="login" style="display:none">
+
+<h2>Login</h2>
+
+<input id="user" placeholder="username">
+<input id="pass" type="password" placeholder="password">
+
+<button class="mainbtn" onclick="login()">Login</button>
+
+<div id="loginmsg"></div>
 
 </div>
 
@@ -275,122 +301,196 @@ display:block;
 
 <script>
 
-function showPage(id){
+function page(id){
 
-document.getElementById("dashboard").style.display="none"
-document.getElementById("portfolio").style.display="none"
-document.getElementById("journal").style.display="none"
-document.getElementById("copy").style.display="none"
+let pages=["dashboard","screener","portfolio","journal","social","leaderboard","login"]
+
+pages.forEach(p=>document.getElementById(p).style.display="none")
 
 document.getElementById(id).style.display="block"
 
 }
 
 new TradingView.widget({
-
 container_id:"gold_chart",
 symbol:"OANDA:XAUUSD",
 interval:"15",
 theme:"dark",
 width:"100%",
 height:400
-
 })
 
 new TradingView.widget({
-
 container_id:"btc_chart",
 symbol:"BINANCE:BTCUSDT",
 interval:"30",
 theme:"dark",
 width:"100%",
 height:400
-
 })
 
 function aiSignal(){
 
 let rsi=Math.random()*100
 
-let signal="WAIT"
+let s="WAIT"
 
-if(rsi<30) signal="BUY"
-if(rsi>70) signal="SELL"
+if(rsi<30)s="BUY"
+if(rsi>70)s="SELL"
 
-document.getElementById("signal").innerText="AI Signal: "+signal
+document.getElementById("signal").innerText="AI Signal: "+s
 
 }
 
 setInterval(aiSignal,4000)
 
-function addAsset(){
+async function fearGreed(){
 
-let asset=document.getElementById("asset").value
-let amount=document.getElementById("amount").value
+let r=await fetch("https://api.alternative.me/fng/")
+let d=await r.json()
 
-let data=JSON.parse(localStorage.getItem("portfolio"))||[]
+let v=d.data[0].value
 
-data.push({asset,amount})
-
-localStorage.setItem("portfolio",JSON.stringify(data))
-
-loadPortfolio()
+document.getElementById("fear").innerText="Fear & Greed: "+v
 
 }
 
-function loadPortfolio(){
+fearGreed()
 
-let data=JSON.parse(localStorage.getItem("portfolio"))||[]
+async function loadMarket(){
+
+let r=await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd")
+
+let d=await r.json()
 
 let html=""
 
-data.forEach(d=>{
+d.slice(0,20).forEach(c=>{
 
-html+=`<tr><td>${d.asset}</td><td>${d.amount}</td></tr>`
+html+=`<tr>
+<td>${c.name}</td>
+<td>$${c.current_price}</td>
+<td>${c.price_change_percentage_24h}%</td>
+<td>${c.market_cap}</td>
+</tr>`
 
+})
+
+document.getElementById("market").innerHTML=html
+
+}
+
+loadMarket()
+
+function addAsset(){
+
+let a=document.getElementById("asset").value
+let b=document.getElementById("amount").value
+
+let d=JSON.parse(localStorage.getItem("portfolio"))||[]
+
+d.push({a,b})
+
+localStorage.setItem("portfolio",JSON.stringify(d))
+
+renderPortfolio()
+
+}
+
+function renderPortfolio(){
+
+let d=JSON.parse(localStorage.getItem("portfolio"))||[]
+
+let html=""
+
+d.forEach(x=>{
+html+=`<tr><td>${x.a}</td><td>${x.b}</td></tr>`
 })
 
 document.getElementById("portfolioTable").innerHTML=html
 
 }
 
+renderPortfolio()
+
 function addTrade(){
 
-let pair=document.getElementById("pair").value
-let result=document.getElementById("result").value
+let p=document.getElementById("pair").value
+let r=document.getElementById("result").value
 
-let data=JSON.parse(localStorage.getItem("journal"))||[]
+let d=JSON.parse(localStorage.getItem("journal"))||[]
 
-data.push({pair,result})
+d.push({p,r})
 
-localStorage.setItem("journal",JSON.stringify(data))
+localStorage.setItem("journal",JSON.stringify(d))
 
-loadJournal()
+renderJournal()
 
 }
 
-function loadJournal(){
+function renderJournal(){
 
-let data=JSON.parse(localStorage.getItem("journal"))||[]
+let d=JSON.parse(localStorage.getItem("journal"))||[]
 
 let html=""
 
-data.forEach(d=>{
-
-html+=`<tr><td>${d.pair}</td><td>${d.result}</td></tr>`
-
+d.forEach(x=>{
+html+=`<tr><td>${x.p}</td><td>${x.r}</td></tr>`
 })
 
 document.getElementById("journalTable").innerHTML=html
 
 }
 
-loadPortfolio()
-loadJournal()
+renderJournal()
+
+function postSignal(){
+
+let pair=document.getElementById("signalPair").value
+let type=document.getElementById("signalType").value
+
+let d=JSON.parse(localStorage.getItem("signals"))||[]
+
+d.push({pair,type})
+
+localStorage.setItem("signals",JSON.stringify(d))
+
+renderSignals()
+
+}
+
+function renderSignals(){
+
+let d=JSON.parse(localStorage.getItem("signals"))||[]
+
+let html=""
+
+d.forEach(s=>{
+html+=`<li>${s.pair} ${s.type}</li>`
+})
+
+document.getElementById("feed").innerHTML=html
+
+}
+
+renderSignals()
+
+function login(){
+
+let u=document.getElementById("user").value
+let p=document.getElementById("pass").value
+
+if(u==="admin" && p==="1234"){
+document.getElementById("loginmsg").innerText="Login success"
+}
+else{
+document.getElementById("loginmsg").innerText="Login failed"
+}
+
+}
 
 const lang={
-
-en:{title:"CafeTrader Elite"},
+en:{title:"CafeTrader ULTRA"},
 vi:{title:"Nền tảng CafeTrader"},
 es:{title:"Plataforma CafeTrader"},
 fr:{title:"Plateforme CafeTrader"},
@@ -400,7 +500,6 @@ zh:{title:"CafeTrader 平台"},
 ja:{title:"CafeTrader プラットフォーム"},
 kr:{title:"CafeTrader 플랫폼"},
 pt:{title:"Plataforma CafeTrader"}
-
 }
 
 function setLang(l){
